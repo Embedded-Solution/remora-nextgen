@@ -1,0 +1,35 @@
+menu "App Settings"
+
+config APP_WIFI_SSID
+    string "Wi-Fi SSID (STA)"
+    default "YourSSID"
+
+config APP_WIFI_PASS
+    string "Wi-Fi password (STA)"
+    default "YourPassword"
+
+config APP_UPLOAD_URL
+    string "Upload URL (HTTP POST)"
+    default "http://example.com/api/dives/upload"
+
+config APP_VBUS_SENSE_GPIO
+    int "GPIO d'entrée pour l'alimentation externe (VBUS_SENSE)"
+    range 0 48
+    default 5
+
+config APP_TOUCH_PAD_NUM
+    int "Touch pad pour détection d'eau"
+    range 0 14
+    default 3
+
+config APP_TOUCH_THRESH_PCT
+    int "Seuil tactile (pourcent du baseline)"
+    range 10 95
+    default 70
+
+config APP_MAX_RUN_SECONDS
+    int "Durée max d'exécution (s) avant retour en deep-sleep"
+    range 5 3600
+    default 120
+
+endmenu

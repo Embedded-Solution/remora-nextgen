@@ -1,0 +1,19 @@
+# PlatformIO build files
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# VSCode settings
+.vscode/
+
+# Espressif IDF caches
+sdkconfig
+sdkconfig.old
+
+# Python virtualenv (si utilisé)
+.venv/
+venv/
+
+# Autres fichiers temporaires
+*.pyc
+__pycache__/
