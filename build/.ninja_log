@@ -985,3 +985,5 @@
 140105	141829	7779436505808573	esp-idf/wifi_provisioning/CMakeFiles/__idf_wifi_provisioning.dir/src/scheme_softap.c.obj	99d46fb0c9c6d733
 139352	141966	7779436507228582	esp-idf/wifi_provisioning/CMakeFiles/__idf_wifi_provisioning.dir/src/manager.c.obj	99d91713f7f559d1
 57	11172	7779481332826365	build.ninja	9bfe7680a6d1be2
+83	1037988	0	CMakeFiles/confserver	13281fff51fdbf73
+83	1037988	0	C:/Users/erwan/Documents/PlatformIO/Projects/test-remora-freertos/build/CMakeFiles/confserver	13281fff51fdbf73

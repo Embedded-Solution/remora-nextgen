@@ -1,5 +1,8 @@
 menu "App Settings"
-
+config APP_DEBUG_DISABLE_VBUS_WAKE
+    bool "Désactiver le réveil EXT1 (VBUS) pour le debug"
+    default y
+    
 config APP_WIFI_SSID
     string "Wi-Fi SSID (STA)"
     default "YourSSID"
@@ -15,12 +18,12 @@ config APP_UPLOAD_URL
 config APP_VBUS_SENSE_GPIO
     int "GPIO d'entrée pour l'alimentation externe (VBUS_SENSE)"
     range 0 48
-    default 5
+    default 18
 
 config APP_TOUCH_PAD_NUM
     int "Touch pad pour détection d'eau"
     range 0 14
-    default 3
+    default 2
 
 config APP_TOUCH_THRESH_PCT
     int "Seuil tactile (pourcent du baseline)"
@@ -31,5 +34,34 @@ config APP_MAX_RUN_SECONDS
     int "Durée max d'exécution (s) avant retour en deep-sleep"
     range 5 3600
     default 120
+
+config RGB_LED_PIN_R
+    int "GPIO pour Rouge"
+    range 0 48
+    default 15
+
+config RGB_LED_PIN_G
+    int "GPIO pour Vert"
+    range 0 48
+    default 16
+
+config RGB_LED_PIN_B
+    int "GPIO pour Bleu"
+    range 0 48
+    default 17
+
+config RGB_LED_COMMON_ANODE
+    bool "LED à anode commune (inversion du PWM)"
+    default y
+
+config RGB_LED_PWM_FREQ_HZ
+    int "Fréquence PWM (Hz)"
+    range 100 20000
+    default 5000
+
+config RGB_LED_PWM_RES_BITS
+    int "Résolution PWM (bits)"
+    range 8 13
+    default 8
 
 endmenu

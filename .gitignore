@@ -17,3 +17,4 @@ venv/
 # Autres fichiers temporaires
 *.pyc
 __pycache__/
+build/log/idf_py_stdout_output_14996
