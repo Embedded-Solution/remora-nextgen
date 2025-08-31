@@ -21,7 +21,7 @@
 #define CONFIG_APP_VBUS_SENSE_GPIO 4
 #endif
 #ifndef CONFIG_APP_DEBUG_DISABLE_VBUS_WAKE
-#define CONFIG_APP_DEBUG_DISABLE_VBUS_WAKE 1
+#define CONFIG_APP_DEBUG_DISABLE_VBUS_WAKE 0
 #endif
 
 static const char *TAG = "main";
@@ -49,10 +49,17 @@ static void go_to_deep_sleep(void)
 
 void app_main(void)
 {
+#if CONFIG_APP_DEBUG_DISABLE_VBUS_WAKE
+    ESP_LOGW(TAG, "Config: EXT1 (VBUS) DISABLED by CONFIG");
+#else
+    ESP_LOGI(TAG, "Config: EXT1 (VBUS) ENABLED");
+#endif
     // NVS
     esp_err_t err = nvs_flash_init();
-    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-        nvs_flash_erase(); nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        nvs_flash_erase();
+        nvs_flash_init();
     }
 
     // Init capteur tactile
@@ -66,29 +73,32 @@ void app_main(void)
 
     bool launched = false;
 
-    if (cause == ESP_SLEEP_WAKEUP_TOUCHPAD) {
+    if (cause == ESP_SLEEP_WAKEUP_TOUCHPAD)
+    {
         app_dive_start();
         launched = true;
     }
 #if !CONFIG_APP_DEBUG_DISABLE_VBUS_WAKE
-    else if (cause == ESP_SLEEP_WAKEUP_EXT1) {
+    else if (cause == ESP_SLEEP_WAKEUP_EXT1)
+    {
         gpio_config_t io = {
             .pin_bit_mask = 1ULL << CONFIG_APP_VBUS_SENSE_GPIO,
             .mode = GPIO_MODE_INPUT,
             .pull_up_en = GPIO_PULLUP_DISABLE,
             .pull_down_en = GPIO_PULLDOWN_ENABLE,
-            .intr_type = GPIO_INTR_DISABLE
-        };
+            .intr_type = GPIO_INTR_DISABLE};
         gpio_config(&io);
         int vbus = gpio_get_level(CONFIG_APP_VBUS_SENSE_GPIO);
         ESP_LOGI(TAG, "EXT1 wake, VBUS=%d", vbus);
-        if (vbus == 1) {
+        if (vbus == 1)
+        {
             app_upload_start();
             launched = true;
         }
     }
 #endif
-    else {
+    else
+    {
         // Cold boot : on teste les triggers
         ESP_LOGI(TAG, "Cold boot -> probing triggers before sleep");
 
@@ -98,20 +108,22 @@ void app_main(void)
             .mode = GPIO_MODE_INPUT,
             .pull_up_en = GPIO_PULLUP_DISABLE,
             .pull_down_en = GPIO_PULLDOWN_ENABLE,
-            .intr_type = GPIO_INTR_DISABLE
-        };
+            .intr_type = GPIO_INTR_DISABLE};
         gpio_config(&io);
         int vbus = gpio_get_level(CONFIG_APP_VBUS_SENSE_GPIO);
-        if (vbus == 1) {
+        if (vbus == 1)
+        {
             ESP_LOGI(TAG, "VBUS present at cold boot -> upload");
             app_upload_start();
             launched = true;
-        } else
+        }
+        else
 #endif
         {
             bool wet = touch_water_is_present();
             ESP_LOGI(TAG, "Water at boot: %s", wet ? "YES" : "no");
-            if (wet) {
+            if (wet)
+            {
                 app_dive_start();
                 launched = true;
             }
@@ -120,20 +132,23 @@ void app_main(void)
 
     // Petite boucle garde-fou puis sommeil
     const int64_t t0 = esp_timer_get_time();
-    while (1) {
+    while (1)
+    {
         vTaskDelay(pdMS_TO_TICKS(200));
         int64_t elapsed_s = (esp_timer_get_time() - t0) / 1000000;
-        if (!launched) {
+        if (!launched)
+        {
             ESP_LOGI(TAG, "No task -> sleep");
             break;
         }
-        if (elapsed_s >= CONFIG_APP_MAX_RUN_SECONDS) {
+        if (elapsed_s >= CONFIG_APP_MAX_RUN_SECONDS)
+        {
             ESP_LOGW(TAG, "Timeout (%ds) -> sleep", CONFIG_APP_MAX_RUN_SECONDS);
             break;
         }
     }
 
     configure_wake_sources();
-    wifi_net_stop();       // coupe la radio si elle a été utilisée
+    wifi_net_stop(); // coupe la radio si elle a été utilisée
     go_to_deep_sleep();
 }
