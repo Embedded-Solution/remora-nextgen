@@ -65,3 +65,53 @@ config RGB_LED_PWM_RES_BITS
     default 8
 
 endmenu
+
+menu "MS5837 pressure sensor"
+
+config MS5837_I2C_ADDR
+    hex "I2C address"
+    default 0x76
+    range 0x00 0x7F
+
+config MS5837_SIMULATION
+    bool "Enable simulation mode (no hardware needed)"
+    default y
+
+config MS5837_SIM_TEMP_MIN_C
+    int "Simulated temperature min (°C)"
+    default 15
+
+config MS5837_SIM_TEMP_MAX_C
+    int "Simulated temperature max (°C)"
+    default 28
+
+config MS5837_SIM_PRESS_MIN_BAR
+    int "Simulated pressure min (bar *1000 => mbar)"
+    default 1000
+
+config MS5837_SIM_PRESS_MAX_BAR
+    int "Simulated pressure max (bar *1000 => mbar)"
+    default 1500
+
+endmenu
+
+menu "TSYS01 temperature sensor"
+
+config TSYS01_I2C_ADDR
+    hex "I2C address"
+    default 0x77
+    range 0x00 0x7F
+
+config TSYS01_SIMULATION
+    bool "Enable simulation mode (no hardware needed)"
+    default y
+
+config TSYS01_SIM_TEMP_MIN_C
+    int "Simulated temperature min (°C)"
+    default 10
+
+config TSYS01_SIM_TEMP_MAX_C
+    int "Simulated temperature max (°C)"
+    default 30
+
+endmenu
